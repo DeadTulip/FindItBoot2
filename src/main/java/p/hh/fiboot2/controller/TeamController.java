@@ -3,7 +3,9 @@ package p.hh.fiboot2.controller;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import p.hh.fiboot2.domain.Team;
 import p.hh.fiboot2.dto.TeamDto;
+import p.hh.fiboot2.service.TeamService;
 
 @RestController
 @RequestMapping("/team")
@@ -12,6 +14,9 @@ public class TeamController {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private TeamService teamService;
+
     @PostMapping
     public TeamDto createTeam() {
         return null;
@@ -19,7 +24,8 @@ public class TeamController {
 
     @GetMapping("/{teamId}")
     public TeamDto readTeam(@PathVariable Long teamId) {
-        return null;
+        Team team = teamService.getTeam(teamId);
+        return modelMapper.map(team, TeamDto.class);
     }
 
     @PostMapping("/udpate")
@@ -28,7 +34,7 @@ public class TeamController {
     }
 
     @DeleteMapping("/{teamId}")
-    public TeamDto deleteTeam() {
-        return null;
+    public void deleteTeam(@PathVariable Long teamId) {
+        teamService.deleteTeam(teamId);
     }
 }

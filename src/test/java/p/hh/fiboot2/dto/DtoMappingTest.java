@@ -17,7 +17,7 @@ public class DtoMappingTest {
         User user = DomainUtil.createUser();
         UserDto userDto = modelMapper.map(user, UserDto.class);
         System.out.println(userDto);
-        MappingUtil.verifyUserMapping(user, userDto);
+        VerifyUtil.verifyUserMapping(user, userDto);
     }
 
     @Test
@@ -27,7 +27,7 @@ public class DtoMappingTest {
 
         TeamDto teamDto = modelMapper.map(team, TeamDto.class);
         System.out.println(teamDto);
-        MappingUtil.verifyTeamMapping(team, teamDto);
+        VerifyUtil.verifyTeamMapping(team, teamDto);
     }
 
     @Test
@@ -36,7 +36,7 @@ public class DtoMappingTest {
         DigitalItem di = DomainUtil.createDigitalItem(user);
         DigitalItemDto diDto = modelMapper.map(di, DigitalItemDto.class);
         System.out.println(diDto);
-        MappingUtil.verifyDigitalItemMapping(di, diDto);
+        VerifyUtil.verifyDigitalItemMapping(di, diDto);
     }
 
     @Test
@@ -45,7 +45,7 @@ public class DtoMappingTest {
         PhysicalItem pi = DomainUtil.createPhysicalItem(user);
         PhysicalItemDto piDto = modelMapper.map(pi, PhysicalItemDto.class);
         System.out.println(piDto);
-        MappingUtil.verifyPhysicalItemMapping(pi, piDto);
+        VerifyUtil.verifyPhysicalItemMapping(pi, piDto);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class DtoMappingTest {
         User user = DomainUtil.createUser();
         UserDto userDto = modelMapper.map(user, UserDto.class);
         System.out.println(userDto);
-        MappingUtil.verifyUserMapping(user, userDto);
+        VerifyUtil.verifyUserMapping(user, userDto);
     }
 
 }

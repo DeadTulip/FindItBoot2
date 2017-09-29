@@ -4,7 +4,7 @@ import p.hh.fiboot2.domain.*;
 
 import static org.junit.Assert.assertEquals;
 
-public class MappingUtil {
+public class VerifyUtil {
 
     static void verifyUserMapping(User user, UserDto userDto) {
         assertEquals(user.getId(), userDto.getUserId());
