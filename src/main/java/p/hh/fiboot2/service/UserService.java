@@ -32,10 +32,18 @@ public class UserService {
         return userDao.save(user);
     }
 
+    public User updateUser(Long userId, User user) {
+        User userToBeUpdated = getUser(userId);
+        userToBeUpdated.setUsername(user.getUsername());
+        return userDao.save(userToBeUpdated);
+    }
+
     public void deleteUser(User user) {
-        itemService.deleteAllItemsCreatedByUser(user);
-        teamService.deleteAllTeamsCreatedByUser(user);
-        userDao.delete(user);
+        if (user != null) {
+            itemService.deleteAllItemsCreatedByUser(user);
+            teamService.deleteAllTeamsCreatedByUser(user);
+            userDao.delete(user);
+        }
     }
 
     public List<Item> getAllAccessibleItems(User user) {

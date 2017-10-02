@@ -49,11 +49,15 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public UserDto updateUser(@PathVariable Long userId, UserDto userDto) {
-        return null;
+    @ResponseStatus(HttpStatus.OK)
+    public UserDto updateUser(@PathVariable Long userId, @RequestBody UserDto userDto) {
+        User user = modelMapper.map(userDto, User.class);
+        User updatedUser = userService.updateUser(userId, user);
+        return modelMapper.map(updatedUser, UserDto.class);
     }
 
     @DeleteMapping("/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userService.getUser(userId));
     }
