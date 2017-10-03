@@ -11,11 +11,8 @@ import javax.persistence.Column;
 @ToString(callSuper = true)
 public class DigitalItemDto extends ItemDto {
 
-    @Setter(AccessLevel.NONE)
-    private String itemType = "Digital";
     private String originalFileName;
     private String fileName;
     private String fileType;
     private Long fileSize;
-
 }

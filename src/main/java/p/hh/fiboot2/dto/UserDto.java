@@ -8,8 +8,4 @@ public class UserDto {
     private String username;
     private String password;
     private String role;
-    private TeamDto[] createdTeams;
-    private TeamDto[] joinedTeams;
-    private ItemDto[] createdItems;
-    private ItemDto[] accessibleItems;
 }

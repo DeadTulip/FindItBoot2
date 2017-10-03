@@ -2,15 +2,14 @@ package p.hh.fiboot2.dto;
 
 import org.junit.Test;
 import org.modelmapper.ModelMapper;
-import p.hh.fiboot2.domain.DigitalItem;
-import p.hh.fiboot2.domain.PhysicalItem;
-import p.hh.fiboot2.domain.Team;
-import p.hh.fiboot2.domain.User;
+import org.modelmapper.PropertyMap;
+import p.hh.fiboot2.domain.*;
+import p.hh.fiboot2.init.ModelMapperCreator;
 
 
 public class DtoMappingTest {
 
-    private ModelMapper modelMapper = new ModelMapper();
+    private ModelMapper modelMapper = new ModelMapperCreator().create();
 
     @Test
     public void testUserDtoMapping() {

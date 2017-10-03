@@ -31,7 +31,7 @@ public class UserControllerIntegrationTest {
     private MockMvc mvc;
 
     @Test
-    public void userOperationTest() throws Exception {
+    public void basicCrudTest() throws Exception {
         String userName = "haihan";
         long userId = createUser(userName);
         readUser(userId, userName);
@@ -80,7 +80,7 @@ public class UserControllerIntegrationTest {
                 .put("password", "haihanPassword")
                 .toString();
 
-        MvcResult result = mvc.perform(put("/user/" + userId)
+        MvcResult result = mvc.perform(put("/user")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(payload)
         )

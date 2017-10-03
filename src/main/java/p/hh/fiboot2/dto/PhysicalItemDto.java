@@ -12,8 +12,6 @@ import javax.persistence.Column;
 @ToString(callSuper = true)
 public class PhysicalItemDto extends ItemDto {
 
-    @Setter(AccessLevel.NONE)
-    private String itemType = "Physical";
     private Float length;
     private Float width;
     private Float height;

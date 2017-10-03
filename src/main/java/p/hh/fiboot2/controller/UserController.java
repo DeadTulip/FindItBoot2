@@ -31,52 +31,47 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto createUser(@RequestBody UserDto userDto) {
-        User user = modelMapper.map(userDto, User.class);
-        User createdUser = userService.createUser(user);
-        UserDto createdUserDto = modelMapper.map(user, UserDto.class);
-        return createdUserDto;
+        return userService.createUser(userDto);
     }
 
     @GetMapping("/{userId}")
     public UserDto readUser(@PathVariable Long userId, HttpServletResponse response) {
-        User user = userService.getUser(userId);
-        if (user != null) {
-            return modelMapper.map(user, UserDto.class);
+        UserDto userDto = userService.getUser(userId);
+        if (userDto != null) {
+            return userDto;
         } else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return null;
         }
     }
 
-    @PutMapping("/{userId}")
+    @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public UserDto updateUser(@PathVariable Long userId, @RequestBody UserDto userDto) {
-        User user = modelMapper.map(userDto, User.class);
-        User updatedUser = userService.updateUser(userId, user);
-        return modelMapper.map(updatedUser, UserDto.class);
+    public UserDto updateUser(@RequestBody UserDto userDto) {
+        return userService.updateUser(userDto);
     }
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Long userId) {
-        userService.deleteUser(userService.getUser(userId));
+        userService.deleteUser(userId);
     }
 
-    @GetMapping("/{userId}/full")
-    public UserDto getUserFullInfo(@PathVariable Long userId) {
-        User user = userService.getUser(userId);
-        UserDto userDto = modelMapper.map(user, UserDto.class);
-        userDto.setJoinedTeams(MappingUtil.mapTeamList(modelMapper, new ArrayList<>(user.getJoinedTeams())));
-
-        List<Team> teamList = teamService.getAllTeamsCreatedByUser(user);
-        userDto.setCreatedTeams(MappingUtil.mapTeamList(modelMapper, teamList));
-
-        List<Item> itemList = itemService.getAllItemsCreatedByUser(user);
-        userDto.setCreatedItems(MappingUtil.mapItemList(modelMapper, itemList));
-
-        List<Item> accessibleItemList = userService.getAllAccessibleItems(user);
-        userDto.setAccessibleItems(MappingUtil.mapItemList(modelMapper, accessibleItemList));
-
-        return userDto;
-    }
+//    @GetMapping("/{userId}/full")
+//    public UserDto getUserFullInfo(@PathVariable Long userId) {
+//        User user = userService.getUser(userId);
+//        UserDto userDto = modelMapper.map(user, UserDto.class);
+//        userDto.setJoinedTeams(MappingUtil.mapTeamList(modelMapper, new ArrayList<>(user.getJoinedTeams())));
+//
+//        List<Team> teamList = teamService.getAllTeamsCreatedByUser(user);
+//        userDto.setCreatedTeams(MappingUtil.mapTeamList(modelMapper, teamList));
+//
+//        List<Item> itemList = itemService.getAllItemsCreatedByUser(user);
+//        userDto.setCreatedItems(MappingUtil.mapItemList(modelMapper, itemList));
+//
+//        List<Item> accessibleItemList = userService.getAllAccessibleItems(user);
+//        userDto.setAccessibleItems(MappingUtil.mapItemList(modelMapper, accessibleItemList));
+//
+//        return userDto;
+//    }
 }

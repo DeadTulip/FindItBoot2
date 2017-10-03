@@ -17,4 +17,5 @@ public abstract class ItemDto {
     private String involvedPeople;
     private String involvedPlaces;
     private String description;
+    private String itemType;
 }
