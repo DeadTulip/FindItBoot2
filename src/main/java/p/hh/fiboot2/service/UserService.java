@@ -4,15 +4,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import p.hh.fiboot2.dao.UserDao;
-import p.hh.fiboot2.domain.Item;
-import p.hh.fiboot2.domain.Team;
 import p.hh.fiboot2.domain.User;
 import p.hh.fiboot2.dto.UserDto;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class UserService {

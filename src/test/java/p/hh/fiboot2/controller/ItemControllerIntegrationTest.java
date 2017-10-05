@@ -14,6 +14,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 
 import static org.hamcrest.Matchers.is;
@@ -33,6 +35,7 @@ public class ItemControllerIntegrationTest {
     private MockMvc mvc;
 
     private Date today = new Date();
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     @Test
     public void basicCrudTest() throws Exception {
@@ -42,12 +45,12 @@ public class ItemControllerIntegrationTest {
         Long itemId = createItem(userId, itemName);
         readItem(itemId);
 
-//        String newItemName = "myNewComputer";
-//        updateItem(itemId, newItemName);
-//        readItem(itemId);
-//
-//        deleteItem(itemId);
-//        readNonExistItem(itemId);
+        String newItemName = "myNewComputer";
+        updateItem(itemId, newItemName);
+        readItem(itemId);
+
+        deleteItem(itemId);
+        readNonExistItem(itemId);
     }
 
     private Long createUser() throws Exception {
@@ -68,21 +71,23 @@ public class ItemControllerIntegrationTest {
 
     private Long createItem(Long userId, String itemName) throws Exception {
         String payload = new JSONObject()
-                .put("user", new JSONObject()
+                .put("owner", new JSONObject()
                         .put("userId", userId)
                 )
+                .put("itemType", "Digital")
                 .put("name", itemName)
-                .put("dateCreated", today)
-                .put("dateUpdated", today)
-                .put("eventStartTime", today)
+                .put("dateCreated", sdf.format(today))
+                .put("dateUpdated", sdf.format(today))
+                .put("eventStartTime", sdf.format(today))
                 .put("description", "myDescription")
+                .put("originalFileName", "myOriginalFileName")
+                .put("fileName", "myFileName")
                 .toString();
 
         MvcResult result = mvc.perform(
-                post("item").contentType(MediaType.APPLICATION_JSON).content(payload)
+                post("/item").contentType(MediaType.APPLICATION_JSON).content(payload)
         )
                 .andDo(print())
-                .andExpect(status().isCreated())
                 .andReturn();
         String content = result.getResponse().getContentAsString();
         Long itemId = JsonPath.parse(content).read("$.itemId", Long.class);
@@ -90,35 +95,41 @@ public class ItemControllerIntegrationTest {
     }
 
     private void readItem(Long itemId) throws Exception {
-        mvc.perform(get("item/" + itemId).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/item/" + itemId).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
     private void updateItem(Long itemId, String newItemName) throws Exception {
         String payload = new JSONObject()
-                .put("user", new JSONObject()
-                        .put("userId", 1)
-                        .put("userName", "haihan")
-                )
+                .put("itemId", itemId)
                 .put("name", newItemName)
-                .put("dateCreated", today)
-                .put("dateUpdated", today)
-                .put("eventStartTime", today)
+                .put("dateCreated", sdf.format(today))
+                .put("dateUpdated", sdf.format(today))
+                .put("eventStartTime", sdf.format(today))
                 .put("description", "myDescription")
+                .put("originalFileName", "myOriginalFileName")
+                .put("fileName", "myFileName")
                 .toString();
 
-        MvcResult result = mvc.perform(
-                put("item/" + itemId).contentType(MediaType.APPLICATION_JSON).content(payload)
+        mvc.perform(
+                put("/item").contentType(MediaType.APPLICATION_JSON).content(payload)
         )
                 .andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is(newItemName)))
                 .andReturn();
     }
 
-    private void deleteItem(Long itemId) {
+    private void deleteItem(Long itemId) throws Exception {
+        mvc.perform(delete("/item/" + itemId).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNoContent());
     }
 
-    private void readNonExistItem(Long itemId) {
+    private void readNonExistItem(Long itemId) throws Exception {
+        mvc.perform(get("/item/" + itemId).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 }

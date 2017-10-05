@@ -32,7 +32,7 @@ public class ItemService {
     private ModelMapper modelMapper;
 
     public ItemDto getItem(Long itemId) {
-        Item item = itemDao.getOne(itemId);
+        Item item = itemDao.findOne(itemId);
         if (item == null) {
             return null;
         } else if (item instanceof DigitalItem) {
@@ -42,20 +42,20 @@ public class ItemService {
         }
     }
 
-    public ItemDto createItem(ItemDto itemDto) {
+    public DigitalItemDto createDigitalItem(DigitalItemDto itemDto) {
         User owner = userDao.findOne(itemDto.getOwner().getUserId());
-        if ("Digital".equals(itemDto.getItemType())) {
-            DigitalItem di = modelMapper.map(itemDto, DigitalItem.class);
-            di.setOwner(owner);
-            DigitalItem createdDi = itemDao.save(di);
-            return modelMapper.map(createdDi, DigitalItemDto.class);
+        DigitalItem di = modelMapper.map(itemDto, DigitalItem.class);
+        di.setOwner(owner);
+        DigitalItem createdDi = itemDao.save(di);
+        return modelMapper.map(createdDi, DigitalItemDto.class);
+    }
 
-        } else {
-            PhysicalItem pi = modelMapper.map(itemDto, PhysicalItem.class);
-            pi.setOwner(owner);
-            PhysicalItem createdPi = itemDao.save(pi);
-            return modelMapper.map(createdPi, PhysicalItemDto.class);
-        }
+    public PhysicalItemDto createPhysicalItem(PhysicalItemDto itemDto) {
+        User owner = userDao.findOne(itemDto.getOwner().getUserId());
+        PhysicalItem pi = modelMapper.map(itemDto, PhysicalItem.class);
+        pi.setOwner(owner);
+        PhysicalItem createdPi = itemDao.save(pi);
+        return modelMapper.map(createdPi, PhysicalItemDto.class);
     }
 
     public ItemDto updateItem(ItemDto itemDto) {

@@ -70,7 +70,8 @@ public class UserControllerIntegrationTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userId", is(userId.intValue())))
-                .andExpect(jsonPath("$.username", is(userName)));
+                .andExpect(jsonPath("$.username", is(userName)))
+                .andExpect(jsonPath("$.password").doesNotExist());
     }
 
     private void updateUser(Long userId, String userName) throws Exception {

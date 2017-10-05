@@ -2,9 +2,7 @@ package p.hh.fiboot2.dto;
 
 import org.junit.Test;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import p.hh.fiboot2.domain.*;
-import p.hh.fiboot2.init.ModelMapperCreator;
 
 
 public class DtoMappingTest {

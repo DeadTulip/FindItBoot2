@@ -1,32 +1,20 @@
 package p.hh.fiboot2.controller;
 
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
-import p.hh.fiboot2.domain.Item;
-import p.hh.fiboot2.domain.Team;
-import p.hh.fiboot2.domain.User;
-import p.hh.fiboot2.dto.MappingUtil;
 import p.hh.fiboot2.dto.UserDto;
-import p.hh.fiboot2.service.ItemService;
-import p.hh.fiboot2.service.TeamService;
 import p.hh.fiboot2.service.UserService;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired private ModelMapper modelMapper;
-    @Autowired private UserService userService;
-    @Autowired private TeamService teamService;
-    @Autowired private ItemService itemService;
+    @Autowired
+    private UserService userService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
