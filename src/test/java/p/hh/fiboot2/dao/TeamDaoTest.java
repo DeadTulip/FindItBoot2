@@ -14,6 +14,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -38,33 +39,32 @@ public class TeamDaoTest {
 
         // create team
         String teamName = "myTeamName";
-        assertEquals(teamDao.findAllByTeamName(teamName).size(), 0);
+        assertNull(teamDao.findByTeamName(teamName));
         Team team = new Team();
         team.setCreator(user);
         team.setTeamName(teamName);
         teamDao.save(team);
 
         // read
-        List<Team> teamList = teamDao.findAllByTeamName(teamName);
-        assertEquals(teamList.size(), 1);
-        Team createdTeam = teamList.get(0);
+        Team createdTeam = teamDao.findByTeamName(teamName);
+        assertNotNull(createdTeam);
         assertNotNull(team.getId());
         assertEquals(teamName, createdTeam.getTeamName());
         assertEquals("myUsername", createdTeam.getCreator().getUsername());
 
         // update
         String newTeamName = "myNewTeamName";
-        assertEquals(teamDao.findAllByTeamName(newTeamName).size(), 0);
+        assertNull(teamDao.findByTeamName(newTeamName));
         createdTeam.setTeamName(newTeamName);
         teamDao.save(createdTeam);
-        assertEquals(teamDao.findAllByTeamName(teamName).size(), 0);
-        assertEquals(teamDao.findAllByTeamName(newTeamName).size(), 1);
+        assertNull(teamDao.findByTeamName(teamName));
+        assertNotNull(teamDao.findByTeamName(newTeamName));
 
         // delete
         teamDao.delete(createdTeam);
-        assertEquals(teamDao.findAllByTeamName(newTeamName).size(), 0);
+        assertNull(teamDao.findByTeamName(newTeamName));
 
         // creator is not deleted
-        assertEquals(userDao.findAllByUsername("myUsername").size(), 1);
+        assertNotNull(userDao.findByUsername("myUsername"));
     }
 }

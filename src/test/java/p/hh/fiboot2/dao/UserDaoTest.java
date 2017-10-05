@@ -14,6 +14,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -31,7 +32,7 @@ public class UserDaoTest {
     public void basicCrudTest() {
         String userName = "myUsername";
         String password = "myPassword";
-        assertEquals(userDao.findAllByUsername(userName).size(), 0);
+        assertNull(userDao.findByUsername(userName));
 
         // create
         User user = new User();
@@ -40,24 +41,23 @@ public class UserDaoTest {
         userDao.save(user);
 
         // read
-        List<User> userList = userDao.findAllByUsername(userName);
-        assertEquals(userList.size(), 1);
-        User createdUser = userList.get(0);
+        User createdUser = userDao.findByUsername(userName);
+        assertNotNull(createdUser);
         assertNotNull(user.getId());
         assertEquals(userName, createdUser.getUsername());
         assertEquals(password, createdUser.getPassword());
 
         // update
         String newUserName = "myNewUsername";
-        assertEquals(userDao.findAllByUsername(newUserName).size(), 0);
+        assertNull(userDao.findByUsername(newUserName));
         createdUser.setUsername(newUserName);
         userDao.save(createdUser);
-        assertEquals(userDao.findAllByUsername(userName).size(), 0);
-        assertEquals(userDao.findAllByUsername(newUserName).size(), 1);
+        assertNull(userDao.findByUsername(userName));
+        assertNotNull(userDao.findByUsername(newUserName));
 
         // delete
         userDao.delete(createdUser);
-        assertEquals(userDao.findAllByUsername(newUserName).size(), 0);
+        assertNull(userDao.findByUsername(newUserName));
     }
 
 

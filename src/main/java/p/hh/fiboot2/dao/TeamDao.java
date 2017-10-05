@@ -10,6 +10,6 @@ import java.util.List;
  * Created by Atos on 21-9-2017.
  */
 public interface TeamDao extends JpaRepository<Team, Long> {
-    List<Team> findAllByTeamName(String teamName);
+    Team findByTeamName(String teamName);
     List<Team> findAllByCreator(User user);
 }

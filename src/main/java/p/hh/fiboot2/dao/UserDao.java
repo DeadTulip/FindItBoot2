@@ -6,6 +6,6 @@ import p.hh.fiboot2.domain.User;
 import java.util.List;
 
 public interface UserDao extends JpaRepository<User, Long> {
-    List<User> findAllByUsername(String username);
+    User findByUsername(String username);
 
 }
