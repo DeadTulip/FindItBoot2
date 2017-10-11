@@ -1,27 +1,58 @@
 package p.hh.fiboot2.config;
 
-import org.springframework.context.annotation.Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import p.hh.fiboot2.security.*;
+import p.hh.fiboot2.security.filter.AuthenticationFilter;
+import p.hh.fiboot2.security.provider.ApplicationUserService;
+import p.hh.fiboot2.security.token.TokenService;
+import p.hh.fiboot2.security.provider.DaoUsernamePasswordAuthenticationProvider;
+import p.hh.fiboot2.security.provider.TokenAuthenticationProvider;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private RESTAuthenticationEntryPoint authenticationEntryPoint;
+    @Autowired
+    private ApplicationUserService applicationUserService;
+
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("user1").password("user1").roles("USER")
-                .and()
-                .withUser("admin1").password("admin1").roles("USER", "ADMIN");
+    protected void configure(AuthenticationManagerBuilder builder) throws Exception {
+        builder.authenticationProvider(daoUsernamePasswordAuthenticationProvider())
+                .authenticationProvider(tokenAuthenticationProvider());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeRequests()
-                .antMatchers("/user/**").hasAnyRole("USER")
-                .antMatchers("/item/**").hasAnyRole("ADMIN")
-                .and().formLogin();
+        http.authorizeRequests().antMatchers("/").permitAll()
+                .anyRequest().authenticated();
+        http.csrf().disable();
+        http.exceptionHandling().authenticationEntryPoint(authenticationEntryPoint);
+
+        http.addFilterBefore(new AuthenticationFilter(authenticationManager()), BasicAuthenticationFilter.class);
     }
+
+    @Bean
+    public TokenService tokenService() {
+        return new TokenService();
+    }
+
+    @Bean
+    public AuthenticationProvider tokenAuthenticationProvider() {
+        return new TokenAuthenticationProvider(tokenService());
+    }
+
+    @Bean
+    public DaoUsernamePasswordAuthenticationProvider daoUsernamePasswordAuthenticationProvider() {
+        return new DaoUsernamePasswordAuthenticationProvider(tokenService(), applicationUserService);
+    }
+
 }

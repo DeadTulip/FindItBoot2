@@ -25,7 +25,7 @@ public class TeamService {
     private ModelMapper modelMapper;
 
     public Team getTeam(Long teamId) {
-        return teamDao.getOne(teamId);
+        return teamDao.findOne(teamId);
     }
 
     public TeamDto[] getAllTeamsCreatedByUser(Long userId) {
