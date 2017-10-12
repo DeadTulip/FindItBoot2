@@ -3,19 +3,9 @@ package p.hh.fiboot2.controller;
 import com.jayway.jsonpath.JsonPath;
 import org.json.JSONObject;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 
 import static org.hamcrest.Matchers.is;
@@ -24,15 +14,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
-@Transactional
-@ActiveProfiles("test")
-public class ItemControllerIntegrationTest {
 
-    @Autowired
-    private MockMvc mvc;
+public class ItemControllerIntegrationTest extends AbstractControllerIntegrationTest {
 
     private Date today = new Date();
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -59,10 +42,7 @@ public class ItemControllerIntegrationTest {
                 .put("password", "haihanPassword")
                 .toString();
 
-        MvcResult result = mvc.perform(post("/user")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(payload)
-        ).andReturn();
+        MvcResult result = mvc.perform(withToken(post("/user").content(payload))).andReturn();
 
         String content = result.getResponse().getContentAsString();
         Long userId = JsonPath.parse(content).read("$.userId", Long.class);
@@ -84,9 +64,7 @@ public class ItemControllerIntegrationTest {
                 .put("fileName", "myFileName")
                 .toString();
 
-        MvcResult result = mvc.perform(
-                post("/item").contentType(MediaType.APPLICATION_JSON).content(payload)
-        )
+        MvcResult result = mvc.perform(withToken(post("/item").content(payload)))
                 .andDo(print())
                 .andReturn();
         String content = result.getResponse().getContentAsString();
@@ -95,7 +73,7 @@ public class ItemControllerIntegrationTest {
     }
 
     private void readItem(Long itemId) throws Exception {
-        mvc.perform(get("/item/" + itemId).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(withToken(get("/item/" + itemId)))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -113,7 +91,7 @@ public class ItemControllerIntegrationTest {
                 .toString();
 
         mvc.perform(
-                put("/item").contentType(MediaType.APPLICATION_JSON).content(payload)
+                withToken(put("/item").content(payload))
         )
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -122,13 +100,13 @@ public class ItemControllerIntegrationTest {
     }
 
     private void deleteItem(Long itemId) throws Exception {
-        mvc.perform(delete("/item/" + itemId).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(withToken(delete("/item/" + itemId)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
 
     private void readNonExistItem(Long itemId) throws Exception {
-        mvc.perform(get("/item/" + itemId).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(withToken(get("/item/" + itemId)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }

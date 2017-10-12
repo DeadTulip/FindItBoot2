@@ -2,6 +2,9 @@ package p.hh.fiboot2.dto;
 
 import p.hh.fiboot2.domain.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static org.junit.Assert.assertEquals;
 
 public class VerifyUtil {
@@ -21,10 +24,10 @@ public class VerifyUtil {
         assertEquals(item.getId(), itemDto.getItemId());
         verifyUserMapping(item.getOwner(), itemDto.getOwner());
         assertEquals(item.getName(), itemDto.getName());
-        assertEquals(item.getDateCreated(), itemDto.getDateCreated());
-        assertEquals(item.getDateUpdated(), itemDto.getDateUpdated());
-        assertEquals(item.getEventStartTime(), itemDto.getEventStartTime());
-        assertEquals(item.getEventEndTime(), itemDto.getEventEndTime());
+        assertEquals(formatDate(item.getDateCreated()), itemDto.getDateCreated());
+        assertEquals(formatDate(item.getDateUpdated()), itemDto.getDateUpdated());
+        assertEquals(formatDate(item.getEventStartTime()), itemDto.getEventStartTime());
+        assertEquals(formatDate(item.getEventEndTime()), itemDto.getEventEndTime());
         assertEquals(item.getInvolvedPeople(), itemDto.getInvolvedPeople());
         assertEquals(item.getInvolvedPlaces(), itemDto.getInvolvedPlaces());
         assertEquals(item.getDescription(), itemDto.getDescription());
@@ -47,4 +50,12 @@ public class VerifyUtil {
         assertEquals(pi.getHeight(), piDto.getHeight());
     }
 
+    private static String formatDate(Date date) {
+        if (date != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            return sdf.format(date);
+        } else {
+            return null;
+        }
+    }
 }

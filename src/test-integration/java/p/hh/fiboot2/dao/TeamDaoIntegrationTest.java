@@ -20,7 +20,7 @@ import static org.junit.Assert.assertNull;
 @DataJpaTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class TeamDaoTest {
+public class TeamDaoIntegrationTest {
 
     @Autowired
     private UserDao userDao;

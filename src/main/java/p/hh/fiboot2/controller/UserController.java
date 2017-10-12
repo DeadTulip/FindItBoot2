@@ -1,6 +1,8 @@
 package p.hh.fiboot2.controller;
 
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 public class UserController {
 
     @Autowired
+    @Getter @Setter
     private UserService userService;
 
     @PostMapping

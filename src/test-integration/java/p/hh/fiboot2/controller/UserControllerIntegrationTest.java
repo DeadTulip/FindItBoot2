@@ -1,22 +1,9 @@
 package p.hh.fiboot2.controller;
 
 import com.jayway.jsonpath.JsonPath;
-import com.sun.glass.ui.Application;
 import org.json.JSONObject;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.filter.TypeExcludeFilters;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.transaction.annotation.Transactional;
-import p.hh.fiboot2.security.filter.AuthenticationFilter;
 
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -24,15 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureMockMvc
-@Transactional
-@ActiveProfiles("test")
-public class UserControllerIntegrationTest {
 
-    @Autowired
-    private MockMvc mvc;
+public class UserControllerIntegrationTest extends AbstractControllerIntegrationTest {
 
     @Test
     public void basicCrudTest() throws Exception {
@@ -54,10 +34,7 @@ public class UserControllerIntegrationTest {
                 .put("password", "haihanPassword")
                 .toString();
 
-        MvcResult result = mvc.perform(post("/user")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(payload)
-        )
+        MvcResult result = mvc.perform(withToken(post("/user").content(payload)))
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.username", is(userName)))
@@ -70,7 +47,7 @@ public class UserControllerIntegrationTest {
 
 
     private void readUser(Long userId, String userName) throws Exception {
-        mvc.perform(get("/user/" + userId).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(withToken(get("/user/" + userId)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userId", is(userId.intValue())))
@@ -85,10 +62,7 @@ public class UserControllerIntegrationTest {
                 .put("password", "haihanPassword")
                 .toString();
 
-        MvcResult result = mvc.perform(put("/user")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(payload)
-        )
+        MvcResult result = mvc.perform(withToken(put("/user").content(payload)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username", is(userName)))
@@ -96,13 +70,13 @@ public class UserControllerIntegrationTest {
     }
 
     private void deleteUser(Long userId) throws Exception {
-        mvc.perform(delete("/user/" + userId).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(withToken(delete("/user/" + userId)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
 
     private void readNonExistUser(Long userId) throws Exception {
-        mvc.perform(get("/user/" + userId).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(withToken(get("/user/" + userId)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
