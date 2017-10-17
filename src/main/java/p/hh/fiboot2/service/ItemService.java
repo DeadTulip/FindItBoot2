@@ -70,7 +70,7 @@ public class ItemService {
         }
     }
 
-    public ItemDto[] getAllItemsCreatedByUser(Long userId) {
+    public List<ItemDto> getAllItemsCreatedByUser(Long userId) {
         User user = userDao.findOne(userId);
         List<Item> items = itemDao.findAllByOwner(user);
         return MappingUtil.mapItemList(modelMapper, items);

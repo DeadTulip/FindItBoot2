@@ -37,7 +37,7 @@ public class UserControllerTest extends AbstractControllerTest<UserController> {
         controller.setUserService(userService);
         return controller;
     }
-    
+
     @Test
     public void test_readNonExistUser() throws Exception {
         given(this.userService.getUser(1L)).willReturn(null);

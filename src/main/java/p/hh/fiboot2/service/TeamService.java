@@ -28,9 +28,16 @@ public class TeamService {
         return teamDao.findOne(teamId);
     }
 
-    public TeamDto[] getAllTeamsCreatedByUser(Long userId) {
+    public List<TeamDto> getAllTeamsCreatedByUser(Long userId) {
         User user = userDao.findOne(userId);
         return MappingUtil.mapTeamList(modelMapper, teamDao.findAllByCreator(user));
+    }
+
+    public TeamDto createTeam(TeamDto teamDto) {
+        Team team = modelMapper.map(teamDto, Team.class);
+        Team savedTeam = teamDao.save(team);
+        teamDto.setTeamId(savedTeam.getId());
+        return teamDto;
     }
 
     public void deleteAllTeamsCreatedByUser(Long userId) {
@@ -43,4 +50,17 @@ public class TeamService {
         teamDao.delete(teamId);
     }
 
+    public void addMember(Long teamId, Long userId) {
+        Team team = teamDao.findOne(teamId);
+        User user = userDao.findOne(userId);
+        team.getMembers().add(user);
+        teamDao.save(team);
+    }
+
+    public void removeMember(Long teamId, Long userId) {
+        Team team = teamDao.findOne(teamId);
+        User user = userDao.findOne(userId);
+        team.getMembers().remove(user);
+        teamDao.save(team);
+    }
 }
