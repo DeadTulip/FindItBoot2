@@ -4,11 +4,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import p.hh.fiboot2.dao.UserDao;
-import p.hh.fiboot2.domain.Team;
 import p.hh.fiboot2.domain.User;
 import p.hh.fiboot2.dto.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -88,4 +89,28 @@ public class UserService {
         return userDetailDto;
     }
 
+    public ItemAddInfoDto toAddItem(Long userId) {
+        ItemAddInfoDto dto = new ItemAddInfoDto();
+        List<TeamDto> createdTeamList = teamService.getAllTeamsCreatedByUser(userId);
+        dto.setSharedTeamsOptions(
+                createdTeamList.stream().map(TeamDto::getTeamName).collect(Collectors.toList()));
+
+        List<ItemDto> createdItemList = itemService.getAllItemsCreatedByUser(userId);
+        List<String> involvedPeopleOptions = createdItemList.stream()
+                .map(ItemDto::getInvolvedPeople)
+                .flatMap(it -> Arrays.stream(it.split(",")))
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+        dto.setInvolvedPeopleOptions(involvedPeopleOptions);
+
+        List<String> involvedPlaceOptions = createdItemList.stream()
+                .map(ItemDto::getInvolvedPlaces)
+                .flatMap(it -> Arrays.stream(it.split(",")))
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+        dto.setInvolvedPlaceOptions(involvedPlaceOptions);
+        return dto;
+    }
 }

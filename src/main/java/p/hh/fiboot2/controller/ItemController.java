@@ -9,10 +9,9 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import p.hh.fiboot2.domain.DigitalItem;
-import p.hh.fiboot2.dto.DigitalItemDto;
-import p.hh.fiboot2.dto.ItemDto;
-import p.hh.fiboot2.dto.PhysicalItemDto;
+import p.hh.fiboot2.dto.*;
 import p.hh.fiboot2.service.ItemService;
+import p.hh.fiboot2.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,7 +25,15 @@ public class ItemController {
     private ItemService itemService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private ModelMapper modelMapper;
+
+    @PostMapping("/toAdd")
+    public ItemAddInfoDto toAddItem(@RequestBody UserDto userDto) {
+        return userService.toAddItem(userDto.getUserId());
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

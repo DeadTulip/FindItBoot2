@@ -24,8 +24,6 @@ public class VerifyUtil {
         assertEquals(item.getId(), itemDto.getItemId());
         verifyUserMapping(item.getOwner(), itemDto.getOwner());
         assertEquals(item.getName(), itemDto.getName());
-        assertEquals(formatDate(item.getDateCreated()), itemDto.getDateCreated());
-        assertEquals(formatDate(item.getDateUpdated()), itemDto.getDateUpdated());
         assertEquals(formatDate(item.getEventStartTime()), itemDto.getEventStartTime());
         assertEquals(formatDate(item.getEventEndTime()), itemDto.getEventEndTime());
         assertEquals(item.getInvolvedPeople(), itemDto.getInvolvedPeople());

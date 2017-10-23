@@ -14,6 +14,7 @@ import p.hh.fiboot2.dto.ItemDto;
 import p.hh.fiboot2.dto.MappingUtil;
 import p.hh.fiboot2.dto.PhysicalItemDto;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -46,6 +47,8 @@ public class ItemService {
         User owner = userDao.findOne(itemDto.getOwner().getUserId());
         DigitalItem di = modelMapper.map(itemDto, DigitalItem.class);
         di.setOwner(owner);
+        di.setDateCreated(new Date());
+        di.setDateUpdated(new Date());
         DigitalItem createdDi = itemDao.save(di);
         return modelMapper.map(createdDi, DigitalItemDto.class);
     }
@@ -54,6 +57,8 @@ public class ItemService {
         User owner = userDao.findOne(itemDto.getOwner().getUserId());
         PhysicalItem pi = modelMapper.map(itemDto, PhysicalItem.class);
         pi.setOwner(owner);
+        pi.setDateCreated(new Date());
+        pi.setDateUpdated(new Date());
         PhysicalItem createdPi = itemDao.save(pi);
         return modelMapper.map(createdPi, PhysicalItemDto.class);
     }
@@ -61,6 +66,7 @@ public class ItemService {
     public ItemDto updateItem(ItemDto itemDto) {
         Item item = itemDao.findOne(itemDto.getItemId());
         modelMapper.map(itemDto, item);
+        item.setDateUpdated(new Date());
         Item savedItem = itemDao.save(item);
 
         if (item instanceof DigitalItem) {
