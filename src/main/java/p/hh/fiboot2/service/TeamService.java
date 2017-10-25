@@ -35,6 +35,9 @@ public class TeamService {
 
     public TeamDto createTeam(TeamDto teamDto) {
         Team team = modelMapper.map(teamDto, Team.class);
+        team.setTeamName(teamDto.getTeamName());
+        User creator = userDao.findOne(teamDto.getCreator().getUserId());
+        team.setCreator(creator);
         Team savedTeam = teamDao.save(team);
         teamDto.setTeamId(savedTeam.getId());
         return teamDto;

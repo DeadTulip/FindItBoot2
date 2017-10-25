@@ -89,6 +89,11 @@ public class UserService {
         return userDetailDto;
     }
 
+    public List<ItemDto> getAccessibleItems(Long userId) {
+        // TODO: add joined items
+        return itemService.getAllItemsCreatedByUser(userId);
+    }
+
     public ItemAddInfoDto toAddItem(Long userId) {
         ItemAddInfoDto dto = new ItemAddInfoDto();
         List<TeamDto> createdTeamList = teamService.getAllTeamsCreatedByUser(userId);

@@ -63,4 +63,10 @@ public class UserController {
         return userService.getUserDetail(userId);
     }
 
+
+    @GetMapping("/{userId}/accessibleItems")
+    public List<ItemDto> getUserAccessibleItems(@PathVariable Long userId) {
+        return userService.getAccessibleItems(userId);
+    }
+
 }
