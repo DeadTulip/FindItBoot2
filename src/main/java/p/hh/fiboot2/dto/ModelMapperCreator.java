@@ -5,10 +5,7 @@ import org.modelmapper.AbstractConverter;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
-import p.hh.fiboot2.domain.DigitalItem;
-import p.hh.fiboot2.domain.Item;
-import p.hh.fiboot2.domain.PhysicalItem;
-import p.hh.fiboot2.domain.User;
+import p.hh.fiboot2.domain.*;
 import p.hh.fiboot2.dto.DigitalItemDto;
 import p.hh.fiboot2.dto.ItemDto;
 import p.hh.fiboot2.dto.PhysicalItemDto;
@@ -17,6 +14,8 @@ import p.hh.fiboot2.dto.UserDto;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ModelMapperCreator {
 

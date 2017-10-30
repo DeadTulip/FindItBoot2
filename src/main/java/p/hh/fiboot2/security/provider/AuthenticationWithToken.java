@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 
 import java.util.Collection;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -15,6 +16,7 @@ public class AuthenticationWithToken extends PreAuthenticatedAuthenticationToken
 
     private Long userId;
     private String userName;
+    private Set<String> roles;
 
     public AuthenticationWithToken(Object aPrincipal, Object aCredentials) {
         super(aPrincipal, aCredentials);

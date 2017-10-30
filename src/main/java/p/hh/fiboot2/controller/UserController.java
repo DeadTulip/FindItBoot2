@@ -6,10 +6,8 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import p.hh.fiboot2.dto.ItemAddInfoDto;
-import p.hh.fiboot2.dto.ItemDto;
-import p.hh.fiboot2.dto.UserDetailDto;
-import p.hh.fiboot2.dto.UserDto;
+import p.hh.fiboot2.dto.*;
+import p.hh.fiboot2.exception.DuplicateResourceException;
 import p.hh.fiboot2.service.UserService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -24,9 +22,18 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public UserDto createUser(@RequestBody UserDto userDto) {
-        return userService.createUser(userDto);
+    public UserDto createUser(@RequestBody UserDto userDto, HttpServletResponse response) {
+        UserDto returnedUserDto;
+        try {
+            returnedUserDto = userService.createUser(userDto);
+            response.setStatus(HttpServletResponse.SC_CREATED);
+
+        } catch (DuplicateResourceException dre) {
+            returnedUserDto = new UserDto();
+            returnedUserDto.setErrorMessage(dre.getMessage());
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        return returnedUserDto;
     }
 
     @GetMapping("/{userId}")

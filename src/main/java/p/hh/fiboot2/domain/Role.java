@@ -1,7 +1,16 @@
 package p.hh.fiboot2.domain;
 
-/**
- * Created by Atos on 19-6-2017.
- */
-public class Role {
+import lombok.Data;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table
+@Data
+public class Role extends BaseEntity {
+
+    @Column
+    private String authority;
 }

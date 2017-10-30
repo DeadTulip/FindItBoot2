@@ -6,7 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import p.hh.fiboot2.domain.Team;
 import p.hh.fiboot2.dto.TeamDto;
+import p.hh.fiboot2.exception.DuplicateResourceException;
+import p.hh.fiboot2.exception.ResourceNotFoundException;
 import p.hh.fiboot2.service.TeamService;
+
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/team")
@@ -19,9 +23,18 @@ public class TeamController {
     private TeamService teamService;
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public TeamDto createTeam(@RequestBody TeamDto teamDto) {
-        return teamService.createTeam(teamDto);
+    public TeamDto createTeam(@RequestBody TeamDto teamDto, HttpServletResponse response) {
+        TeamDto returnedTeamDto;
+        try {
+            returnedTeamDto = teamService.createTeam(teamDto);
+            response.setStatus(HttpServletResponse.SC_CREATED);
+
+        } catch (DuplicateResourceException dre) {
+            returnedTeamDto = new TeamDto();
+            returnedTeamDto.setErrorMessage(dre.getMessage());
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        return returnedTeamDto;
     }
 
     @GetMapping("/{teamId}")
@@ -40,10 +53,14 @@ public class TeamController {
         teamService.deleteTeam(teamId);
     }
 
-    @PutMapping("/{teamId}/addMember/{userId}")
-    @ResponseStatus(HttpStatus.OK)
-    public void addMember(@PathVariable Long teamId, @PathVariable Long userId) {
-        teamService.addMember(teamId, userId);
+    @PutMapping("/{teamId}/addMember/{userName}")
+    public void addMember(@PathVariable Long teamId, @PathVariable String userName, HttpServletResponse response) {
+        try {
+            teamService.addMember(teamId, userName);
+            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+        } catch(ResourceNotFoundException rnfe) {
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+        }
     }
 
     @PutMapping("/{teamId}/removeMember/{userId}")

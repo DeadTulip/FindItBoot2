@@ -2,9 +2,11 @@ package p.hh.fiboot2.security.provider;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import p.hh.fiboot2.domain.Role;
 import p.hh.fiboot2.domain.User;
 
 import java.util.Collection;
+import java.util.Set;
 
 public class ApplicationUser implements UserDetails {
 
@@ -28,6 +30,10 @@ public class ApplicationUser implements UserDetails {
 
     public Long getUserId() {
         return user.getId();
+    }
+
+    public Set<Role> getUserRoles() {
+        return user.getRoles();
     }
 
     @Override

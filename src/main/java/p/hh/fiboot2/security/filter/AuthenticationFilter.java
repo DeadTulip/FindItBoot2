@@ -122,6 +122,7 @@ public class AuthenticationFilter extends GenericFilterBean {
         TokenResponse tokenResponse = new TokenResponse(
                 resultOfAuthentication.getUserId(),
                 resultOfAuthentication.getUserName(),
+                resultOfAuthentication.getRoles(),
                 resultOfAuthentication.getDetails().toString()
         );
         String tokenJsonResponse = new ObjectMapper().writeValueAsString(tokenResponse);

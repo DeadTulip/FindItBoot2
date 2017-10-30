@@ -3,7 +3,10 @@ package p.hh.fiboot2.security.provider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import p.hh.fiboot2.domain.Role;
 import p.hh.fiboot2.security.token.TokenService;
+
+import java.util.stream.Collectors;
 
 public class DaoUsernamePasswordAuthenticationProvider extends DaoAuthenticationProvider {
 
@@ -23,6 +26,7 @@ public class DaoUsernamePasswordAuthenticationProvider extends DaoAuthentication
         authToken.setToken(newToken);
         authToken.setUserId(result.getUserId());
         authToken.setUserName(result.getUsername());
+        authToken.setRoles(result.getUserRoles().stream().map(Role::getAuthority).collect(Collectors.toSet()));
         authToken.setAuthenticated(true);
         tokenService.store(newToken, authToken);
         return authToken;

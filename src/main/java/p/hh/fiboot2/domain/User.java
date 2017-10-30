@@ -20,10 +20,18 @@ public class User extends BaseEntity {
     }
 
     @Column
-    String username;
+    private String username;
 
     @Column
-    String password;
+    private String password;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = { @JoinColumn(name = "user_id", nullable = false) },
+            inverseJoinColumns = { @JoinColumn(name = "role_id", nullable = false) }
+    )
+    private final Set<Role> roles = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class TeamDto {
+public class TeamDto extends BaseDto {
 
     private Long teamId;
     private String teamName;

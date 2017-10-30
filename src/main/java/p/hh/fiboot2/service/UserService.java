@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import p.hh.fiboot2.dao.UserDao;
 import p.hh.fiboot2.domain.User;
 import p.hh.fiboot2.dto.*;
+import p.hh.fiboot2.exception.DuplicateResourceException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +40,11 @@ public class UserService {
         return MappingUtil.mapUserList(modelMapper, userList);
     }
 
-    public UserDto createUser(UserDto userDto) {
+    public UserDto createUser(UserDto userDto) throws DuplicateResourceException {
+        User userWithName = userDao.findByUsername(userDto.getUsername());
+        if (userWithName != null) {
+            throw new DuplicateResourceException("User", userDto.getUsername());
+        }
         User user = modelMapper.map(userDto, User.class);
         userDao.save(user);
         return modelMapper.map(user, UserDto.class);
