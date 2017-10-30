@@ -66,32 +66,29 @@ public class UserService {
         }
     }
 
-    public UserDetailDto getUserDetail(Long userId) {
-        UserDetailDto userDetailDto = null;
+    public List<TeamDto> getUserTeams(Long userId) {
+        List<TeamDto> teams = new ArrayList<>();
         User user = userDao.findOne(userId);
         if(user != null) {
-            userDetailDto = new UserDetailDto();
-            userDetailDto.setUserId(user.getId());
-            userDetailDto.setUsername(user.getUsername());
 
             List<TeamDto> createdTeamList = teamService.getAllTeamsCreatedByUser(userId);
-            userDetailDto.setCreatedTeams(createdTeamList);
+            teams.addAll(createdTeamList);
 
             List<TeamDto> joinedTeamList = MappingUtil.mapTeamList(modelMapper, new ArrayList<>(user.getJoinedTeams()));
-            userDetailDto.setJoinedTeams(joinedTeamList);
+            teams.addAll(joinedTeamList);
 
-            List<ItemDto> createdItemList = itemService.getAllItemsCreatedByUser(userId);
-            userDetailDto.setCreatedItems(createdItemList);
-
-            List<ItemDto> joinedItemList =
-                    Stream.concat(createdTeamList.stream(), joinedTeamList.stream())
-                            .flatMap(t -> t.getMembers().stream())
-                            .distinct()
-                            .flatMap(u -> itemService.getAllItemsCreatedByUser(u.getUserId()).stream())
-                            .collect(Collectors.toList());
-            userDetailDto.setJoinedItems(joinedItemList);
+//            List<ItemDto> createdItemList = itemService.getAllItemsCreatedByUser(userId);
+//            userDetailDto.setCreatedItems(createdItemList);
+//
+//            List<ItemDto> joinedItemList =
+//                    Stream.concat(createdTeamList.stream(), joinedTeamList.stream())
+//                            .flatMap(t -> t.getMembers().stream())
+//                            .distinct()
+//                            .flatMap(u -> itemService.getAllItemsCreatedByUser(u.getUserId()).stream())
+//                            .collect(Collectors.toList());
+//            userDetailDto.setJoinedItems(joinedItemList);
         }
-        return userDetailDto;
+        return teams;
     }
 
     public List<ItemDto> getAccessibleItems(Long userId) {

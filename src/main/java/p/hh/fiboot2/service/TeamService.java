@@ -9,6 +9,7 @@ import p.hh.fiboot2.domain.Team;
 import p.hh.fiboot2.domain.User;
 import p.hh.fiboot2.dto.MappingUtil;
 import p.hh.fiboot2.dto.TeamDto;
+import p.hh.fiboot2.dto.UserDto;
 import p.hh.fiboot2.exception.DuplicateResourceException;
 import p.hh.fiboot2.exception.ResourceNotFoundException;
 
@@ -59,7 +60,7 @@ public class TeamService {
         teamDao.delete(teamId);
     }
 
-    public void addMember(Long teamId, String userName) throws ResourceNotFoundException {
+    public UserDto addMember(Long teamId, String userName) throws ResourceNotFoundException {
         Team team = teamDao.findOne(teamId);
         User user = userDao.findByUsername(userName);
         if (user != null && team.getCreator().getId() != user.getId()) {
@@ -71,6 +72,7 @@ public class TeamService {
         } else {
             throw new ResourceNotFoundException("User", userName);
         }
+        return modelMapper.map(user, UserDto.class);
     }
 
     public void removeMember(Long teamId, Long userId) {

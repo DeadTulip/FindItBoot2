@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import p.hh.fiboot2.domain.Team;
 import p.hh.fiboot2.dto.TeamDto;
+import p.hh.fiboot2.dto.UserDto;
 import p.hh.fiboot2.exception.DuplicateResourceException;
 import p.hh.fiboot2.exception.ResourceNotFoundException;
 import p.hh.fiboot2.service.TeamService;
@@ -54,13 +55,16 @@ public class TeamController {
     }
 
     @PutMapping("/{teamId}/addMember/{userName}")
-    public void addMember(@PathVariable Long teamId, @PathVariable String userName, HttpServletResponse response) {
+    public UserDto addMember(@PathVariable Long teamId, @PathVariable String userName, HttpServletResponse response) {
+        UserDto dto = new UserDto();
         try {
-            teamService.addMember(teamId, userName);
-            response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+            dto = teamService.addMember(teamId, userName);
+            response.setStatus(HttpServletResponse.SC_OK);
         } catch(ResourceNotFoundException rnfe) {
+            dto.setErrorMessage(rnfe.getMessage());
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
+        return dto;
     }
 
     @PutMapping("/{teamId}/removeMember/{userId}")

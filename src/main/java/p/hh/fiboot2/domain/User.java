@@ -2,6 +2,7 @@ package p.hh.fiboot2.domain;
 
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,7 +11,8 @@ import java.util.Set;
 
 @Entity
 @Table
-@Data
+@Getter
+@Setter
 public class User extends BaseEntity {
 
     private static final long serialVersionUID = -3512521164157856626L;

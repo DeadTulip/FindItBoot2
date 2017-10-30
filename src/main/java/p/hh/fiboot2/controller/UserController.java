@@ -65,14 +65,14 @@ public class UserController {
         userService.deleteUser(userId);
     }
 
-    @GetMapping("/{userId}/detail")
-    public UserDetailDto getUserDetail(@PathVariable Long userId) {
-        return userService.getUserDetail(userId);
+    @GetMapping("/{userId}/teams")
+    public List<TeamDto> getUserTeams(@PathVariable Long userId) {
+        return userService.getUserTeams(userId);
     }
 
 
-    @GetMapping("/{userId}/accessibleItems")
-    public List<ItemDto> getUserAccessibleItems(@PathVariable Long userId) {
+    @GetMapping("/{userId}/items")
+    public List<ItemDto> getUserItems(@PathVariable Long userId) {
         return userService.getAccessibleItems(userId);
     }
 
