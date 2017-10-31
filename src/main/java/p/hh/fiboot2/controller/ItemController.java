@@ -43,6 +43,9 @@ public class ItemController {
         if("Digital".equals(jsonMap.get("itemType"))) {
             DigitalItemDto diDto = new DigitalItemDto();
             modelMapper.map(jsonMap, diDto);
+            diDto.setInvolvedPeople(diDto.getInvolvedPeople().replace("[", "").replace("]", ""));
+            diDto.setInvolvedPlaces(diDto.getInvolvedPlaces().replace("[", "").replace("]", ""));
+
             return itemService.createDigitalItem(diDto);
         } else {
             PhysicalItemDto piDto = new PhysicalItemDto();

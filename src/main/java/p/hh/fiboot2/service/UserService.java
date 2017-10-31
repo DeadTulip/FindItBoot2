@@ -98,15 +98,16 @@ public class UserService {
 
     public ItemAddInfoDto toAddItem(Long userId) {
         ItemAddInfoDto dto = new ItemAddInfoDto();
-        List<TeamDto> createdTeamList = teamService.getAllTeamsCreatedByUser(userId);
-        dto.setSharedTeamsOptions(
-                createdTeamList.stream().map(TeamDto::getTeamName).collect(Collectors.toList()));
+        List<String> teamNameList = this.getUserTeams(userId)
+                .stream().map(TeamDto::getTeamName).collect(Collectors.toList());
+        dto.setSharedTeamsOptions(teamNameList);
 
         List<ItemDto> createdItemList = itemService.getAllItemsCreatedByUser(userId);
         List<String> involvedPeopleOptions = createdItemList.stream()
                 .map(ItemDto::getInvolvedPeople)
                 .flatMap(it -> Arrays.stream(it.split(",")))
                 .distinct()
+                .filter(it -> it.trim().length() > 0)
                 .sorted()
                 .collect(Collectors.toList());
         dto.setInvolvedPeopleOptions(involvedPeopleOptions);
@@ -115,6 +116,7 @@ public class UserService {
                 .map(ItemDto::getInvolvedPlaces)
                 .flatMap(it -> Arrays.stream(it.split(",")))
                 .distinct()
+                .filter(it -> it.trim().length() > 0)
                 .sorted()
                 .collect(Collectors.toList());
         dto.setInvolvedPlaceOptions(involvedPlaceOptions);

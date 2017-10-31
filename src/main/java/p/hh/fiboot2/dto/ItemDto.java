@@ -10,6 +10,8 @@ public class ItemDto {
     private Long itemId;
     private UserDto owner;
     private String name;
+    private String dateCreated;
+    private String dateUpdated;
     private String eventStartTime;
     private String eventEndTime;
     private String involvedPeople;

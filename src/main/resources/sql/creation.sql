@@ -80,3 +80,11 @@ create table physical_item (
     primary key (id),
     foreign key (id) references item(id)
 );
+
+create table team_item (
+  team_id integer not null,
+  item_id integer not null,
+
+  foreign key (team_id) references team(id),
+  foreign key (item_id) references item(id)
+);
