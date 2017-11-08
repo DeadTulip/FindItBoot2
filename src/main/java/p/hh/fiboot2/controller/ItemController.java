@@ -15,6 +15,8 @@ import p.hh.fiboot2.service.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -66,8 +68,27 @@ public class ItemController {
     }
 
     @PutMapping
-    public ItemDto updateItem(@RequestBody ItemDto itemDto) {
-        return itemService.updateItem(itemDto);
+    public ItemDto updateItem(HttpEntity<String> httpEntity) {
+        String json = httpEntity.getBody();
+        Map jsonMap = JsonParserFactory.getJsonParser().parseMap(json);
+        if("Digital".equals(jsonMap.get("itemType"))) {
+            DigitalItemDto diDto = new DigitalItemDto();
+            modelMapper.map(jsonMap, diDto);
+            diDto.setInvolvedPeople(diDto.getInvolvedPeople().replace("[", "").replace("]", ""));
+            diDto.setInvolvedPlaces(diDto.getInvolvedPlaces().replace("[", "").replace("]", ""));
+
+            ItemDto updatedItem = itemService.updateItem(diDto);
+
+            List<String> sharedTeams = (List) jsonMap.get("sharedTeams");
+
+            itemService.shareItemWithTeams(updatedItem.getItemId(), sharedTeams);
+
+            return updatedItem;
+        } else {
+            PhysicalItemDto piDto = new PhysicalItemDto();
+            modelMapper.map(jsonMap, piDto);
+            return itemService.updateItem(piDto);
+        }
     }
 
     @DeleteMapping("/{itemId}")

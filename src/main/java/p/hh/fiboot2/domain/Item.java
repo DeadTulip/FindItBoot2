@@ -3,6 +3,7 @@ package p.hh.fiboot2.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.Date;

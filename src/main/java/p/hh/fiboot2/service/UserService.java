@@ -77,23 +77,14 @@ public class UserService {
             List<TeamDto> joinedTeamList = MappingUtil.mapTeamList(modelMapper, new ArrayList<>(user.getJoinedTeams()));
             teams.addAll(joinedTeamList);
 
-//            List<ItemDto> createdItemList = itemService.getAllItemsCreatedByUser(userId);
-//            userDetailDto.setCreatedItems(createdItemList);
-//
-//            List<ItemDto> joinedItemList =
-//                    Stream.concat(createdTeamList.stream(), joinedTeamList.stream())
-//                            .flatMap(t -> t.getMembers().stream())
-//                            .distinct()
-//                            .flatMap(u -> itemService.getAllItemsCreatedByUser(u.getUserId()).stream())
-//                            .collect(Collectors.toList());
-//            userDetailDto.setJoinedItems(joinedItemList);
         }
         return teams;
     }
 
     public List<ItemDto> getAccessibleItems(Long userId) {
-        // TODO: add joined items
-        return itemService.getAllItemsCreatedByUser(userId);
+        List<ItemDto> sharedItems = itemService.getAllShareItemsByUser(userId);
+        List<ItemDto> createdItems = itemService.getAllItemsCreatedByUser(userId);
+        return Stream.concat(sharedItems.stream(), createdItems.stream()).distinct().collect(Collectors.toList());
     }
 
     public ItemAddInfoDto toAddItem(Long userId) {

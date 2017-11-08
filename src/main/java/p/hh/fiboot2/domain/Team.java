@@ -29,4 +29,11 @@ public class Team extends BaseEntity {
     )
     private final Set<User> members = new HashSet<User>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "team_item",
+            joinColumns = { @JoinColumn(name = "team_id", nullable = false) },
+            inverseJoinColumns = { @JoinColumn(name = "item_id", nullable = false) }
+    )
+    private final Set<Item> items = new HashSet<>();
 }
