@@ -46,7 +46,6 @@ public class ItemDaoIntegrationTest {
         di.setDateCreated(new Date());
         di.setDateUpdated(new Date());
         di.setOriginalFileName("myOriginalFileName");
-        di.setFileName("myFileName");
         itemDao.save(di);
 
         // create physical item

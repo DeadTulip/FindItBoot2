@@ -97,7 +97,6 @@ public class ItemService {
         if (item instanceof DigitalItem) {
             DigitalItem di = (DigitalItem)item;
             DigitalItemDto diDto = (DigitalItemDto) itemDto;
-            di.setFileName(diDto.getFileName());
             di.setOriginalFileName(diDto.getOriginalFileName());
             di.setFileSize(diDto.getFileSize());
             di.setFileType(diDto.getFileType());

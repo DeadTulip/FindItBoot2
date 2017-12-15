@@ -40,7 +40,6 @@ public class DomainUtil {
         DigitalItem di = new DigitalItem();
         fillItem(di, user);
         di.setOriginalFileName("myOriginalFileName");
-        di.setFileName("myFileName");
         di.setFileType("myFileType");
         di.setFileSize(1234L);
         return di;

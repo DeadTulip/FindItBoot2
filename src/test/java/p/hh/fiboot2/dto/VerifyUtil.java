@@ -35,7 +35,6 @@ public class VerifyUtil {
         assertEquals("Digital", diDto.getItemType());
         verifyItemMapping(di, diDto);
         assertEquals(di.getOriginalFileName(), diDto.getOriginalFileName());
-        assertEquals(di.getFileName(), diDto.getFileName());
         assertEquals(di.getFileSize(), diDto.getFileSize());
         assertEquals(di.getFileType(), diDto.getFileType());
     }

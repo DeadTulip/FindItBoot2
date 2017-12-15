@@ -1,46 +1,46 @@
 use findit2_test;
 
 create table user (
-    id integer not null auto_increment,
-    version integer not null,
-    username varchar(50) not null,
-    password varchar(100) not null,
+  id integer not null auto_increment,
+  version integer not null,
+  username varchar(50) not null,
+  password varchar(100) not null,
 
-    primary key (id)
+  primary key (id)
 );
 
 create table role (
-    id integer not null auto_increment,
-    version integer not null,
-    authority varchar(20) not null,
+  id integer not null auto_increment,
+  version integer not null,
+  authority varchar(20) not null,
 
-    primary key (id)
+  primary key (id)
 );
 
 create table user_role (
-    user_id integer not null,
-    role_id integer not null,
+  user_id integer not null,
+  role_id integer not null,
 
-    foreign key (user_id) references user(id),
-    foreign key (role_id) references role(id)
+  foreign key (user_id) references user(id),
+  foreign key (role_id) references role(id)
 );
 
 create table team (
-    id integer not null auto_increment,
-    version integer not null,
-    team_name varchar(50) not null,
-    creator integer not null,
+  id integer not null auto_increment,
+  version integer not null,
+  team_name varchar(50) not null,
+  creator integer not null,
 
-    primary key (id),
-    foreign key (creator) references user(id)
+  primary key (id),
+  foreign key (creator) references user(id)
 );
 
 create table team_user (
-    team_id integer not null,
-    user_id integer not null,
+  team_id integer not null,
+  user_id integer not null,
 
-    foreign key (team_id) references team(id),
-    foreign key (user_id) references user(id)
+  foreign key (team_id) references team(id),
+  foreign key (user_id) references user(id)
 );
 
 create table item (
@@ -61,24 +61,24 @@ create table item (
 );
 
 create table digital_item (
-    id integer not null,
-    original_file_name varchar(200) not null,
-    file_name varchar(200) not null,
-    file_type varchar(20),
-    file_size integer,
+  id integer not null,
+  original_file_name varchar(200) not null,
+  file_type varchar(20),
+  file_size integer,
+  file_content mediumtext,
 
-    primary key (id),
-    foreign key (id) references item(id)
+  primary key (id),
+  foreign key (id) references item(id)
 );
 
 create table physical_item (
-    id integer not null,
-    length float,
-    width float,
-    height float,
+  id integer not null,
+  length float,
+  width float,
+  height float,
 
-    primary key (id),
-    foreign key (id) references item(id)
+  primary key (id),
+  foreign key (id) references item(id)
 );
 
 create table team_item (
@@ -88,3 +88,7 @@ create table team_item (
   foreign key (team_id) references team(id),
   foreign key (item_id) references item(id)
 );
+
+insert into role(version, authority) values (0, 'ADMIN');
+insert into user(version, username, password) values (0, 'haihan', 'hh'), (0, 'yu', 'yu');
+insert into user_role(user_id, role_id) values (1, 1);
