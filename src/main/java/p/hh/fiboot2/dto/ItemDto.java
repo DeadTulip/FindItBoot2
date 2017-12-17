@@ -2,7 +2,9 @@ package p.hh.fiboot2.dto;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class ItemDto {
@@ -18,4 +20,6 @@ public class ItemDto {
     private String involvedPlaces;
     private String description;
     private String itemType;
+    private List<String> sharedTeams = new ArrayList<>();
+
 }

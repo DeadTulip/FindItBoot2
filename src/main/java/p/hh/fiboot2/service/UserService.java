@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import p.hh.fiboot2.dao.UserDao;
+import p.hh.fiboot2.domain.Item;
 import p.hh.fiboot2.domain.User;
 import p.hh.fiboot2.dto.*;
 import p.hh.fiboot2.exception.DuplicateResourceException;
@@ -84,7 +85,15 @@ public class UserService {
     public List<ItemDto> getAccessibleItems(Long userId) {
         List<ItemDto> sharedItems = itemService.getAllShareItemsByUser(userId);
         List<ItemDto> createdItems = itemService.getAllItemsCreatedByUser(userId);
-        return Stream.concat(sharedItems.stream(), createdItems.stream()).distinct().collect(Collectors.toList());
+
+        List<ItemDto> accessibleItems = Stream.concat(
+                sharedItems.stream().map(ItemDto::getItemId),
+                createdItems.stream().map(ItemDto::getItemId)
+        ).distinct().sorted()
+                .map(id -> itemService.getItem(id))
+                .collect(Collectors.toList());
+
+        return accessibleItems;
     }
 
     public ItemAddInfoDto toAddItem(Long userId) {

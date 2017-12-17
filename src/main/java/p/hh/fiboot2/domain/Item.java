@@ -7,6 +7,8 @@ import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "item")
@@ -42,5 +44,6 @@ public abstract class Item extends BaseEntity {
     @Column
     private String description;
 
-
+    @ManyToMany(mappedBy = "items")
+    private final Set<Team> teams = new HashSet<>();
 }

@@ -40,13 +40,17 @@ public class ItemService {
 
     public ItemDto getItem(Long itemId) {
         Item item = itemDao.findOne(itemId);
+        ItemDto itemDto = null;
         if (item == null) {
-            return null;
+            itemDto = null;
         } else if (item instanceof DigitalItem) {
-            return modelMapper.map((DigitalItem)item, DigitalItemDto.class);
+            itemDto = modelMapper.map((DigitalItem)item, DigitalItemDto.class);
         } else {
-            return modelMapper.map((PhysicalItem)item, PhysicalItemDto.class);
+            itemDto = modelMapper.map((PhysicalItem)item, PhysicalItemDto.class);
         }
+        List<String> teamNameList = item.getTeams().stream().map(Team::getTeamName).collect(Collectors.toList());
+        itemDto.setSharedTeams(teamNameList);
+        return itemDto;
     }
 
     public DigitalItemDto createDigitalItem(DigitalItemDto itemDto) {
@@ -92,7 +96,6 @@ public class ItemService {
 
         item.setDateCreated(dateCreated);
         item.setDateUpdated(new Date());
-        Item savedItem = itemDao.save(item);
 
         if (item instanceof DigitalItem) {
             DigitalItem di = (DigitalItem)item;
@@ -100,6 +103,8 @@ public class ItemService {
             di.setOriginalFileName(diDto.getOriginalFileName());
             di.setFileSize(diDto.getFileSize());
             di.setFileType(diDto.getFileType());
+            di.setFileContent(diDto.getFileContent());
+            itemDao.save(di);
             return modelMapper.map(di, DigitalItemDto.class);
         } else {
             return modelMapper.map((PhysicalItem)item, PhysicalItemDto.class);
